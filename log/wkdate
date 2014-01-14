@@ -9,15 +9,19 @@
 //1106||#1. Use GenInfo to observe the ABCD event	
 //1107||#1. Copy 11-05 redo ABCD no GenInfo Code #2. Apply CSVL in leading sub-jet
 //1108||#1. Copy 11-06 redo ABCD with GenInfo select
-11AA||#1. Use new difination of Ht(AK5) and be ABCD3 #2. Use new Yaxis Largest CSV #3. The final one 
+//11AA||#1. Use new difination of Ht(AK5) and be ABCD3 #2. Use new Yaxis Largest CSV #3. The final one 
 //11BB||#1. Copy 11-AA focus no GenInfo
-1111||#1. Stabilty test
+//1111||#1. Stabilty test
 //1118||#1. New try...
 //TuPb||#1. X:pT of b-Jet second AK5, Y:Tua1/Tua2 of CA8 or Higgs
-TuHt||#1. X:Ht(AK5), Y:Tua1/Tua2 of CA8 or Higgs #2. Clear the codes
+//TuHt||#1. X:Ht(AK5), Y:Tua1/Tua2 of CA8 or Higgs #2. Clear the codes
 //1128||#1. X:Ht(AK5), Y:Tua1/Tua2 of CA8 or Higgs #2. No CSVL 
-1209||#1. Apply Data #2. Tua2/Tua1 V.S Ht #3. bVeto
-1212||#1. Check skim plots
-1218||#1. Leading CSV bJetVeto, Data
-0105||#1. Leading CSV Clear the codesi(CSVL) #2. Use 1106 skimed MC(no CSV in sub)	
-0106||#1. Leading CSV Clear the codesi(CSVM) #2. Use 1106 skimed MC(no CSV in sub)
+//1209||#1. Apply Data #2. Tua2/Tua1 V.S Ht #3. bVeto
+//1212||#1. Check skim plots
+//1218||#1. Leading CSV bJetVeto, Data
+//0105||#1. Leading CSV Clear the codesi(CSVL) #2. Use 1106 skimed MC(no CSV in sub)	
+//0106||#1. Leading CSV Clear the codesi(CSVM) #2. Use 1106 skimed MC(no CSV in sub)
+TaMC||#1. Tau2/Tau1, MC #2. X: HT by (bJet+Higgs), (AK5), (4LeadAK5) #3. HT:850, 900, 950, 1000 
+TaBV||#1. Tau2/Tau1, Control sample(bVeto) #2. X: HT by (bJet+Higgs), (AK5), (4LeadAK5) #3. HT:850, 900, 950, 1000
+bDMC||#1. SubJets CSV, MC #2. X: HT by (bJet+Higgs), (AK5), (4LeadAK5) #3. HT:850, 900, 950, 1000
+bDBV||#1. SubJets CSV, Control sample(bVeto) #2. X: HT by (bJet+Higgs), (AK5), (4LeadAK5) #3. HT:850, 900, 950, 1000
