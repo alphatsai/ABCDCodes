@@ -15,9 +15,8 @@
 #include "TStyle.h"
 #include "TLorentzVector.h"
 #include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/selection.h"
-//#include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/myformat.h"
 #include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/function.C"
-#include "//afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/format.h"
+#include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/format.h"
 #include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/sampleInfo.h"
 #include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/plotsInfoABCD.h"
 #include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/setTDRStyle_2d.C"
@@ -218,19 +217,14 @@ void abcd2(){
 				if( SubJetInfo.CombinedSVBJetTags[iSub1]<0.244 || SubJetInfo.CombinedSVBJetTags[iSub2]<0.244 )  continue;
 
 				if( SubJetInfo.CombinedSVBJetTags[iSub1]<Subjet1CSV_Min && SubJetInfo.CombinedSVBJetTags[iSub2]<Subjet2CSV_Min){ //Anti-Higgs
-	
 					Jet CA8Jet(CA8JetInfo, i);
 					AntiHiggsLikeJets.push_back(CA8Jet);
-
 					if( 	CA8JetInfo.MassPruned[i]>CA8JetPrunedMass_Min && CA8JetInfo.MassPruned[i]<CA8JetPrunedMass_Max ){  //// apply pruned jet mass cut 
 						AntiHiggsJets.push_back(CA8Jet);
-
 					}
 				}else if( SubJetInfo.CombinedSVBJetTags[iSub1]>=Subjet1CSV_Min && SubJetInfo.CombinedSVBJetTags[iSub2]>=Subjet2CSV_Min ){ //Higgs
-
 					Jet CA8Jet(CA8JetInfo, i);
 					HiggsLikeJets.push_back(CA8Jet);
-
 					if( 	CA8JetInfo.MassPruned[i]>CA8JetPrunedMass_Min && CA8JetInfo.MassPruned[i]<CA8JetPrunedMass_Max ){
 						HiggsJets.push_back(CA8Jet);
 					}
@@ -301,7 +295,6 @@ void abcd2(){
 					p4_bJetsNotHiggsLikeAntiHiggsLike.push_back(*AK5);
 				} 
 			}
-
 			// Veto: bJets candidate isolation with Higgs+HiggsLike
 			for( vector<TLorentzVector>::const_iterator AK5 = p4_bJets_Veto.begin(); AK5 != p4_bJets_Veto.end(); ++AK5 ){
 				bool isHiggs(false); 
