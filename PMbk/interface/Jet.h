@@ -2,7 +2,7 @@
 #define BPRIMETOBH_INTERFACE_JET_H
 
 #include "TLorentzVector.h"
-#include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/interface/format.h"
+#include "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/brch/interface/format.h"
 
 class Jet {
 
@@ -10,6 +10,7 @@ class Jet {
 
     Jet (const Jet& jet) { 
 
+      index_ = jet.Index();
       Et_ = jet.Et() ;
       Pt_ = jet.Pt() ;
       Unc_ = jet.Unc() ;

@@ -62,7 +62,18 @@ void fillABCDvar(TH1F* ha, TH1F* hb, TH1F* hc, TH1F* hd, vType value, xType xVar
 		hd->Fill( value, weight);
 	}
 }
-
+int CloseJetIndex( JetCollection jets_, const Jet myJet_ ){
+	int min_index(-1);
+	for( JetCollection::const_iterator ijet = jets_.begin(); ijet != jets_.end(); ++ijet ){
+		float DR_min = 100.;
+		if( myJet_.DeltaR(*ijet) < DR_min){
+			DR_min = myJet_.DeltaR(*ijet);
+			min_index = ijet->Index();   
+			//cout<<min_index<<" "<<ijet->Index()<<endl;	 
+		}
+	}
+	return min_index;
+}
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Analysis start //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,29 +84,26 @@ void abcd(){
 
 		///////////////////// Create New Tree and Forder //////////////////////==============================================================================
 		string LoadPath	 = "/raid1/w/jtsai/bpTobH/skimGeneral/CA8_Pt150_1/"+SampleChoise[iSample].name+".root";
-		string SavePath  = "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/result/root/abcd/abcd_"+SampleChoise[iSample].name+".root";
+		string SavePath  = "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/brch/result/root/abcd/abcd_"+SampleChoise[iSample].name+".root";
 		TFile* file = new TFile(LoadPath.c_str());
 		TTree* tree = (TTree*)file->Get("BprimebH/tree");
 		TFile* newfile = new TFile( SavePath.c_str() ,"recreate");
 		TTree* newtree_ana;
-		//TTree* newtree_val;
 		if( buildTree ){
 			newfile->mkdir("Analysis");
 			newfile->cd("Analysis");
 				newtree_ana = new TTree("tree", "");
 			newfile->cd();
-		//	newfile->mkdir("Validation");
-		//	newfile->cd("Validation");
-		//		newtree_val = tree->CloneTree(0);
-		//	newfile->cd();
 		}
 		cout <<"Folder Created"<<endl;
 
 		/////////////////////// Connect the Tree, Branch, leaf ////////////////=============================================================================
 		int runNo;
+		int GenEvt_;
 		Long64_t evtNo;
 		int lumiNo;
 		bool McFlag, McFlagana;
+		double xsec_;
 		double PU, PUana;
 		double evtWt, evtWtana;
 		double HTak5, HThiggsbjet;
@@ -108,7 +116,7 @@ void abcd(){
 
 		GenInfoBranches GenInfo;
 		JetInfoBranches CA8JetInfo, HiggsJetInfoAna, AntiHiggsJetInfoAna;
-		JetInfoBranches AK5JetInfo, bJetInfoAna;
+		JetInfoBranches AK5JetInfo, bJetInfoAna, Final_bJetInfoAna;
 		JetInfoBranches SubJetInfo, HiggsSubJet1InfoAna, HiggsSubJet2InfoAna, AntiHiggsSubJet1InfoAna, AntiHiggsSubJet2InfoAna;
 
 		GenInfo.Register(tree);
@@ -117,7 +125,9 @@ void abcd(){
 		SubJetInfo.Register(tree,"SubJetInfo");
 		
 		if( buildTree ){
-			newtree_ana->Branch("EvtInfo.McFlag", 		&McFlagana, 	"EvtInfo.McFlag/O"); // store weight of evt and pu for each event
+			newtree_ana->Branch("EvtInfo.GenEvents",	&GenEvt_, 	"EvtInfo.GenEvents/I"); 
+			newtree_ana->Branch("EvtInfo.McFlag", 		&McFlagana, 	"EvtInfo.McFlag/O"); 
+			newtree_ana->Branch("EvtInfo.XSec", 		&xsec_, 	"EvtInfo.XSec/D"); 
 			newtree_ana->Branch("EvtInfo.PU", 		&PUana, 	"EvtInfo.PU/D"); // store weight of evt and pu for each event
 			newtree_ana->Branch("EvtInfo.WeightEvt",	&evtWtana, 	"EvtInfo.WeightEvt/D"); 	
 			newtree_ana->Branch("EvtInfo.HT_AK5",		&HTak5, 	"EvtInfo.HT_AK5/D"); 	
@@ -125,6 +135,7 @@ void abcd(){
 			HiggsJetInfoAna.RegisterTree(newtree_ana,"HiggsJetInfo");
 			AntiHiggsJetInfoAna.RegisterTree(newtree_ana,"AntiHiggsJetInfo");
 			bJetInfoAna.RegisterTree(newtree_ana,"bJetInfo");
+			Final_bJetInfoAna.RegisterTree(newtree_ana,"FinalbJetInfo");
 			HiggsSubJet1InfoAna.RegisterTree(newtree_ana,"HiggsSubJet1Info");
 			HiggsSubJet2InfoAna.RegisterTree(newtree_ana,"HiggsSubJet2Info");
 			AntiHiggsSubJet1InfoAna.RegisterTree(newtree_ana,"AntiHiggsSubJet1Info");
@@ -374,6 +385,7 @@ void abcd(){
 
 			if( HT_AK5 <= HT_Min ) continue;
 
+			JetCollection Final_bJets_ABCD;
 			JetCollection HiggsJets_ABCD, HiggsSubJet1_ABCD, HiggsSubJet2_ABCD;
 			JetCollection AntiHiggsJets_ABCD, AntiHiggsSubJet1_ABCD, AntiHiggsSubJet2_ABCD;
 			//// Higgs region
@@ -403,6 +415,9 @@ void abcd(){
 						HiggsJets_ABCD.push_back(*H);
 						HiggsSubJet1_ABCD.push_back(SubJet1);
 						HiggsSubJet2_ABCD.push_back(SubJet2);
+						int bmin_index = CloseJetIndex(bJetsNotHiggsLikeAntiHiggsLike, *H);
+						Jet bJetMin(AK5JetInfo, bmin_index);
+						Final_bJets_ABCD.push_back(bJetMin);
 						h1.GetTH1F("ABCDana_HiggsMass")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_HiggsMass_B")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_CA8Pt")->Fill( H->Pt(), weight);
@@ -442,6 +457,9 @@ void abcd(){
 							HiggsJets_ABCD.push_back(*H);
 							HiggsSubJet1_ABCD.push_back(SubJet1);
 							HiggsSubJet2_ABCD.push_back(SubJet2);
+							int bmin_index = CloseJetIndex(bJetsNotHiggsLikeAntiHiggsLike, *H);
+							Jet bJetMin(AK5JetInfo, bmin_index);
+							Final_bJets_ABCD.push_back(bJetMin);
 						} 
 						h1.GetTH1F("ABCDana_HiggsMass")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_HiggsMass_D")->Fill( H->MassPruned(), weight);
@@ -505,6 +523,9 @@ void abcd(){
 						AntiHiggsJets_ABCD.push_back(*H); 
 						AntiHiggsSubJet1_ABCD.push_back(SubJet1);
 						AntiHiggsSubJet2_ABCD.push_back(SubJet2);
+						int bmin_index = CloseJetIndex(bJetsNotHiggsLikeAntiHiggsLike, *H);
+						Jet bJetMin(AK5JetInfo, bmin_index);
+						Final_bJets_ABCD.push_back(bJetMin);
 						h1.GetTH1F("ABCDana_HiggsMass")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_HiggsMass_A")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_CA8Pt")->Fill( H->Pt(), weight);
@@ -544,6 +565,9 @@ void abcd(){
 							AntiHiggsJets_ABCD.push_back(*H); 
 							AntiHiggsSubJet1_ABCD.push_back(SubJet1);
 							AntiHiggsSubJet2_ABCD.push_back(SubJet2);
+							int bmin_index = CloseJetIndex(bJetsNotHiggsLikeAntiHiggsLike, *H);
+							Jet bJetMin(AK5JetInfo, bmin_index);
+							Final_bJets_ABCD.push_back(bJetMin);
 						} 
 						h1.GetTH1F("ABCDana_HiggsMass")->Fill( H->MassPruned(), weight);
 						h1.GetTH1F("ABCDana_HiggsMass_C")->Fill( H->MassPruned(), weight);
@@ -631,7 +655,10 @@ void abcd(){
 			if( Bv != 0 ) h1.GetTH1F("ABCDval_CutFlow")->Fill("ABCDsel", weight);
 
 			if( buildTree ){
-				if( A+B+C+D > 0 ){ 	
+				if( A+B+C+D > 0 ){ 
+					if( McFlag ) xsec_ = SampleChoise[iSample].xsec;
+					else xsec_ = 1.;
+					GenEvt_ = totalEvt;
 					McFlagana = McFlag;
 					PUana = PU;
 					evtWtana = evtWt;
@@ -643,7 +670,8 @@ void abcd(){
 					reRegistJet(HiggsSubJet2_ABCD, HiggsSubJet2InfoAna);	
 					reRegistJet(AntiHiggsSubJet1_ABCD, AntiHiggsSubJet1InfoAna);	
 					reRegistJet(AntiHiggsSubJet2_ABCD, AntiHiggsSubJet2InfoAna);	
-					reRegistJet(bJetsNotHiggsLikeAntiHiggsLike, bJetInfoAna);	
+					reRegistJet(bJetsNotHiggsLikeAntiHiggsLike, bJetInfoAna);
+					reRegistJet(Final_bJets_ABCD, Final_bJetInfoAna);			
 					newtree_ana->Fill();	
 				//	cout<<"A "<<A<<", B "<<B<<", C "<<C<<", D "<<D<<endl;
 				//	cout<<"Higgs "<<HiggsJets_ABCD.size()<<", AntiHiggs "<<AntiHiggsJets_ABCD.size()<<endl;
