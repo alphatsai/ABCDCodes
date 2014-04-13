@@ -84,7 +84,7 @@ void abcd(){
 
 		///////////////////// Create New Tree and Forder //////////////////////==============================================================================
 		string LoadPath	 = "/raid1/w/jtsai/bpTobH/skimGeneral/CA8_Pt150_1/"+SampleChoise[iSample].name+".root";
-		string SavePath  = "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/brch/result/root/abcd/abcd_"+SampleChoise[iSample].name+".root";
+		string SavePath  = "/afs/cern.ch/work/j/jtsai/myAna/bpTobH/mywk/CMSSW_5_3_11/src/PMbk/result/root/abcd/abcd_"+SampleChoise[iSample].name+".root";
 		TFile* file = new TFile(LoadPath.c_str());
 		TTree* tree = (TTree*)file->Get("BprimebH/tree");
 		TFile* newfile = new TFile( SavePath.c_str() ,"recreate");
@@ -179,6 +179,8 @@ void abcd(){
 		cout<<"Running..."<<endl;
 		int evtPass_ana=0;
 		int evtPass_val=0;
+		double sumw2_a, sumw2_b, sumw2_c, sumw2_d, sumw2_av, sumw2_bv, sumw2_cv, sumw2_dv;
+		sumw2_a = sumw2_b = sumw2_c = sumw2_d = sumw2_av= sumw2_bv= sumw2_cv= sumw2_dv = 0.;
 		for( int entry=0; entry<tree->GetEntries(); entry++ ){
 			tree->GetEntry(entry);
 
@@ -614,40 +616,50 @@ void abcd(){
 			h1.GetTH1F("ABCDval_NumCA8_C")->Fill(Cv);
 			h1.GetTH1F("ABCDval_NumCA8_D")->Fill(Dv);
 
+			double w2_ = weight*weight;
+
 			if( B > 0 ){
 				h1.GetTH1F("ABCDana_CutRegion")->Fill("B", weight); evtPass_ana++;
 				h1.GetTH1F("ABCDana_HT_B")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDana_HT")->Fill( HT_AK5, weight);
+				sumw2_b += w2_;
 			}else if( D > 0 ){ 
 				h1.GetTH1F("ABCDana_CutRegion")->Fill("D", weight);
 				h1.GetTH1F("ABCDana_HT_D")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDana_HT")->Fill( HT_AK5, weight);
+				sumw2_d += w2_;
 			}else if( A > 0 ){
 				h1.GetTH1F("ABCDana_CutRegion")->Fill("A", weight);
 				h1.GetTH1F("ABCDana_HT_A")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDana_HT")->Fill( HT_AK5, weight);
+				sumw2_a += w2_;
 			}else if( C > 0 ){
 				h1.GetTH1F("ABCDana_CutRegion")->Fill("C", weight);
 				h1.GetTH1F("ABCDana_HT_C")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDana_HT")->Fill( HT_AK5, weight);
+				sumw2_c += w2_;
 			}
 
 			if( Bv > 0 ){
 				h1.GetTH1F("ABCDval_CutRegion")->Fill("B", weight); evtPass_val++;
 				h1.GetTH1F("ABCDval_HT_B")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDval_HT")->Fill( HT_AK5, weight);
+				sumw2_bv += w2_;
 			}else if( Dv > 0 ){ 
 				h1.GetTH1F("ABCDval_CutRegion")->Fill("D", weight);
 				h1.GetTH1F("ABCDval_HT_D")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDval_HT")->Fill( HT_AK5, weight);
+				sumw2_dv += w2_;
 			}else if( Av > 0 ){
 				h1.GetTH1F("ABCDval_CutRegion")->Fill("A", weight);
 				h1.GetTH1F("ABCDval_HT_A")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDval_HT")->Fill( HT_AK5, weight);
+				sumw2_av += w2_;
 			}else if( Cv > 0 ){
 				h1.GetTH1F("ABCDval_CutRegion")->Fill("C", weight);
 				h1.GetTH1F("ABCDval_HT_C")->Fill( HT_AK5, weight);
 				h1.GetTH1F("ABCDval_HT")->Fill( HT_AK5, weight);
+				sumw2_cv += w2_;
 			}
 			ca8Num_ana->Fill(A+B+C+D, weight);
 			ca8Num_val->Fill(Av+Bv+Cv+Dv, weight);
@@ -681,6 +693,16 @@ void abcd(){
 				//if( Av+Bv+Cv+Dv > 0 ) 	newtree_val->Fill();	
 			}
 		}//entries
+
+		h1.GetTH1F("ABCDana_Sumw2_A")->Fill( 0., sumw2_a);
+		h1.GetTH1F("ABCDana_Sumw2_B")->Fill( 0., sumw2_b);
+		h1.GetTH1F("ABCDana_Sumw2_C")->Fill( 0., sumw2_c);
+		h1.GetTH1F("ABCDana_Sumw2_D")->Fill( 0., sumw2_d);
+		h1.GetTH1F("ABCDval_Sumw2_A")->Fill( 0., sumw2_a);
+		h1.GetTH1F("ABCDval_Sumw2_B")->Fill( 0., sumw2_b);
+		h1.GetTH1F("ABCDval_Sumw2_C")->Fill( 0., sumw2_c);
+		h1.GetTH1F("ABCDval_Sumw2_D")->Fill( 0., sumw2_d);
+
 		newfile->Write();
 		cout<<"evtPass_ana "<<evtPass_ana<<"/"<<tree->GetEntries()<<endl;	
 		cout<<"evtPass_val "<<evtPass_val<<"/"<<tree->GetEntries()<<endl;	

@@ -11,6 +11,15 @@ enum th1flist_{
 	ABCDana_CutRegion_, 		//01-13
 	ABCDval_CutRegion_, 		//01-13
 
+	ABCDana_Sumw2_A,
+	ABCDana_Sumw2_B,
+	ABCDana_Sumw2_C,
+	ABCDana_Sumw2_D,
+	ABCDval_Sumw2_A,
+	ABCDval_Sumw2_B,
+	ABCDval_Sumw2_C,
+	ABCDval_Sumw2_D,
+
 	ABCDana_NumCA8_A,
 	ABCDana_NumCA8_B,
 	ABCDana_NumCA8_C,
@@ -159,6 +168,15 @@ struct TH1Info_ TH1Info[th1_size_] = {
 	{ 0,	"ABCDana_CutRegion",			"",	"Cut Region", 			"Yields", "", 		4, 0, 4}, 	//10-21
 	{ 0,	"ABCDval_CutRegion",			"",	"Cut Region", 			"Yields", "", 		4, 0, 4}, 	//10-21
 
+	{ 0,	"ABCDana_Sumw2_A",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDana_Sumw2_B",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDana_Sumw2_C",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDana_Sumw2_D",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDval_Sumw2_A",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDval_Sumw2_B",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDval_Sumw2_C",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+	{ 0,	"ABCDval_Sumw2_D",			"",	"SumW2 for A", 			"Yields", "", 		1, 0, 1}, 	//10-21
+
 	{ 0,	"ABCDana_NumCA8_A",			"",	"Num of CA8, A region", 	"Events", "", 		3, 1, 4}, 	//10-21
 	{ 0,	"ABCDana_NumCA8_B",			"",	"Num of CA8, B region", 	"Events", "", 		3, 1, 4}, 	//10-21
 	{ 0,	"ABCDana_NumCA8_C",			"",	"Num of CA8, C region", 	"Events", "", 		3, 1, 4}, 	//10-21
@@ -306,8 +324,17 @@ struct OtherInfo_ OtherInfo[th1_size_] = {
 	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_CutFlow_ 	//10-21
 	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_CutFlow_ 	//10-21
 
-	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_HT 	//10-21
-	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_HT 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_CutRegio 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_CutRegio 	//10-21
+
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
+	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_Sumw2 	//10-21
 
 	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_NumCA8_A 	//10-21
 	{0,0.65,0.70,0.85,0.90,"l", 1.3, -1111, -1111, -1111, -1111, 1},		//ABCDana_NumCA8_B 	//10-21
